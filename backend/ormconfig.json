@@ -1,0 +1,10 @@
+{
+    "type": "mysql",
+    "host": "r360poc.cjye3hf53icy.us-east-1.rds.amazonaws.com",
+    "port": 3306,
+    "username": "admin",
+    "password": "graymatter",
+    "database": "Research360",
+    "entities": ["src/**/*.entity{.ts,.js}"],
+    "synchronize": true
+  }
