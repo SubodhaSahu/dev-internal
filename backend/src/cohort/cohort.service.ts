@@ -15,11 +15,11 @@ export class CohortService {
   ) {}
 
   async create(createCohortDto: CreateCohortDto) {
-    createCohortDto.Valid_From = new Date();
-    createCohortDto.Valid_To = new Date();
+    createCohortDto.validFrom = new Date();
+    createCohortDto.validTo = new Date();
     createCohortDto.recordDateTime = new Date();
-    createCohortDto.Latest_Flag = 1;
-    createCohortDto.Latest_Flag = 1;
+    createCohortDto.latestFlag = 1;
+    createCohortDto.activeFlag = 1;
     createCohortDto.companyTenantID = 'R360';
     const cohort = this.cohortRepository.create(createCohortDto);
     await this.cohortRepository.save(createCohortDto);
@@ -31,16 +31,16 @@ export class CohortService {
   }
 
   async findOne(id: number) {
-    return await this.cohortRepository.findOne({ where: { cohortPk: id } });
+    return await this.cohortRepository.findOne({ where: { cohortPK: id } });
   }
 
   async update(id: number, data: UpdateCohortDto) {
-    await this.cohortRepository.update({ cohortPk: id }, data);
-    return await this.cohortRepository.findOne({ where: { cohortPk: id } });
+    await this.cohortRepository.update({ cohortPK: id }, data);
+    return await this.cohortRepository.findOne({ where: { cohortPK: id } });
   }
 
   async remove(id: number) {
-    await this.cohortRepository.delete({ cohortPk: id });
+    await this.cohortRepository.delete({ cohortPK: id });
     return { deleted: true };
   }
 }
