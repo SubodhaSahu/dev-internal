@@ -1,15 +1,13 @@
-import { IsNotEmpty } from 'class-validator';
+import { IsEmpty, IsNotEmpty } from 'class-validator';
 
-export class CreateCohortDto {
+export class CreateCohortGroupDto {
   cohortPK: number;
-
-  @IsNotEmpty()
   cohortID: string;
 
   @IsNotEmpty()
   cohortGroup: string;
 
-  @IsNotEmpty()
+  @IsEmpty()
   cohortName: string;
   validFrom: Date;
   validTo: Date;

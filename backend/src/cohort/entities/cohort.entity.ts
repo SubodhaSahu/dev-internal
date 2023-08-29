@@ -3,22 +3,22 @@ import { Entity, Column, PrimaryGeneratedColumn } from 'typeorm';
 @Entity('STG_Cohort')
 export class CohortEntity {
   @PrimaryGeneratedColumn({ type: 'int', name: 'Cohort_PK' })
-  cohortPk: number;
+  cohortPK: number;
 
   @Column('varchar', { name: 'Cohort_ID', nullable: true, length: 255 })
-  Cohort_ID: string | null;
+  cohortID: string | null;
 
   @Column('varchar', { name: 'Cohort_Group', nullable: true, length: 255 })
-  Cohort_Group: string | null;
+  cohortGroup: string | null;
 
   @Column('varchar', { name: 'Cohort_Name', nullable: true, length: 255 })
-  Cohort_Name: string | null;
+  cohortName: string | null;
 
   @Column('datetime', { name: 'Valid_From', nullable: true })
-  Valid_From: Date | null;
+  validFrom: Date | null;
 
   @Column('datetime', { name: 'Valid_To', nullable: true })
-  Valid_To: Date | null;
+  validTo: Date | null;
 
   @Column('tinyint', {
     name: 'Latest_Flag',
