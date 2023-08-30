@@ -1,10 +1,12 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import {ConfigModule, ConfigService} from '@nestjs/config';
+import { ConfigModule, ConfigService } from '@nestjs/config';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { CohortModule } from './cohort/cohort.module';
-import dbConfiguration from "config/db.config";
+import { UserModule } from './user/user.module';
+import { CohortEmployeeModule } from './cohort-employee/cohort-employee.module';
+import dbConfiguration from 'config/db.config';
 
 @Module({
   imports: [
@@ -14,11 +16,15 @@ import dbConfiguration from "config/db.config";
     }),
     TypeOrmModule.forRootAsync({
       inject: [ConfigService],
-      useFactory: async (configService: ConfigService) => ({ ...configService.get('database') })
+      useFactory: async (configService: ConfigService) => ({
+        ...configService.get('database'),
+      }),
     }),
     CohortModule,
+    UserModule,
+    CohortEmployeeModule,
   ],
   controllers: [AppController],
   providers: [AppService],
 })
-export class AppModule { }
+export class AppModule {}

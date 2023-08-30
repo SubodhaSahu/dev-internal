@@ -17,13 +17,13 @@ export class CohortController {
 
   @Post()
   async create(@Body() createCohortDto: CreateCohortDto) {
+    return createCohortDto;
     //Check if Cohort Group Exists. If exists then insert only the
     //cohord infor else insert cohord group first then insert the cohord
     const createCohortGroupDTO = JSON.parse(JSON.stringify(createCohortDto));
     const cohortGroupExist = await this.cohortService.findCohortGroupByName(
       createCohortGroupDTO.cohortGroup,
     );
-    console.log(cohortGroupExist);
     if (!cohortGroupExist) {
       const newGroup =
         await this.cohortService.createCohortGroup(createCohortGroupDTO);

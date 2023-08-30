@@ -1,4 +1,5 @@
-import { Entity, Column, PrimaryGeneratedColumn } from 'typeorm';
+import { Entity, Column, PrimaryGeneratedColumn, OneToMany } from 'typeorm';
+import { CohortEmployeeEntity } from 'src/cohort-employee/entities/cohort-employee.entity';
 
 @Entity('STG_Cohort')
 export class CohortEntity {
@@ -41,4 +42,10 @@ export class CohortEntity {
 
   @Column('varchar', { name: 'Company_Tenant_ID', nullable: true, length: 255 })
   companyTenantID: string | null;
+
+  @OneToMany(
+    () => CohortEmployeeEntity,
+    (stgCohortEmp) => stgCohortEmp.cohortFk2,
+  )
+  CohortEmps: CohortEmployeeEntity[];
 }
