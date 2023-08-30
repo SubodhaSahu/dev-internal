@@ -9,5 +9,6 @@ import { CohortEntity } from './entities/cohort.entity';
   imports: [TypeOrmModule.forFeature([CohortEntity])],
   controllers: [CohortController, CohortGroupController],
   providers: [CohortService],
+  exports: [CohortService],
 })
 export class CohortModule {}

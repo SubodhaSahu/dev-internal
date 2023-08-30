@@ -3,6 +3,8 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { CohortModule } from './cohort/cohort.module';
+import { UserModule } from './user/user.module';
+import { CohortEmployeeModule } from './cohort-employee/cohort-employee.module';
 
 @Module({
   imports: [
@@ -18,6 +20,8 @@ import { CohortModule } from './cohort/cohort.module';
       entities: [],
     }),
     CohortModule,
+    UserModule,
+    CohortEmployeeModule,
   ],
   controllers: [AppController],
   providers: [AppService],

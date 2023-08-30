@@ -17,21 +17,7 @@ export class CohortService {
 
   async create(createCohortDto: CreateCohortDto) {
     const cohortEntity = this.cohortRepository.create(createCohortDto);
-    await this.cohortRepository.insert(cohortEntity);
-
-    //Check if Cohort Group Exists. If exists then insert only the
-    //cohord infor else insert cohord group first then insert the cohord
-    const createCohortGroupDTO = JSON.parse(JSON.stringify(createCohortDto));
-    const cohortGroupExist = await this.findCohortGroupByName(
-      createCohortGroupDTO.cohortGroup,
-    );
-    console.log(cohortGroupExist);
-    if (!cohortGroupExist) {
-      console.log('Here......');
-      const newGroup = await this.createCohortGroup(createCohortGroupDTO);
-      console.log(newGroup);
-    }
-    return cohortEntity;
+    return await this.cohortRepository.insert(cohortEntity);
   }
 
   async findAll() {
