@@ -11,8 +11,6 @@ yarn-debug.log*
 yarn-error.log*
 lerna-debug.log*
 
-../mock.ts
-
 # OS
 .DS_Store
 

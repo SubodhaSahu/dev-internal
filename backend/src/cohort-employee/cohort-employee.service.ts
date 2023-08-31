@@ -13,9 +13,8 @@ export class CohortEmployeeService {
   ) {}
 
   async create(createCohortEmployeeDto: CreateCohortEmployeeDto) {
-    return createCohortEmployeeDto;
-    // const cohortEmpEntity = this.cohortEmp.create(createCohortEmployeeDto);
-    // return await this.cohortEmp.save(cohortEmpEntity, { reload: false });
+    const cohortEmpEntity = this.cohortEmp.create(createCohortEmployeeDto);
+    return await this.cohortEmp.save(cohortEmpEntity, { reload: false });
   }
 
   findAll() {

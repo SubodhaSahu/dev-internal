@@ -3,9 +3,7 @@ import { Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
 import { UserEntity } from './entities/user.entity';
 import { CreateUserDto } from './dto/create-user.dto';
-// import { CohortEmployeeService } from 'src/cohort-employee/cohort-employee.service';
-//import { CohortEmployeeEntity } from 'src/cohort-employee/entities/cohort-employee.entity';
-//import { UpdateUserDto } from './dto/update-user.dto';
+import { UpdateUserDto } from './dto/update-user.dto';
 
 @Injectable()
 export class UserService {
@@ -36,10 +34,10 @@ export class UserService {
     return await this.userRepository.findOne({ where: { employeePk: id } });
   }
 
-  // async update(id: number, updateUserDto: UpdateUserDto) {
-  //   await this.userRepository.update({ employeePk: id }, updateUserDto);
-  //   return await this.userRepository.findOne({ where: { employeePk: id } });
-  // }
+  async update(id: number, updateUserDto: UpdateUserDto) {
+    await this.userRepository.update({ employeePk: id }, updateUserDto);
+    return await this.userRepository.findOne({ where: { employeePk: id } });
+  }
 
   async remove(id: number) {
     return await this.userRepository.delete({ employeePk: id });
