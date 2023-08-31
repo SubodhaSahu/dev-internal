@@ -107,4 +107,13 @@ export class CohortService {
       .getRawMany();
     return cohortEmp;
   }
+  async findEmployeeCohort(id: number){
+    return  await this.cohortRepository.find({
+      relations: ['cohortEmps'],
+      where: {
+        cohortPk: id,
+    }
+    });
+   
+  }
 }

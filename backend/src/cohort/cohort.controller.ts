@@ -40,4 +40,9 @@ export class CohortController {
   remove(@Param('id') id: string) {
     return this.cohortService.remove(+id);
   }
+  @Get(':id/employee')
+  findEmployeeCohort(@Param('id') id: string) {
+    return this.cohortService.findEmployeeCohort(+id);
+  }
+
 }
