@@ -1,20 +1,20 @@
 import { IsNotEmpty } from 'class-validator';
 
 export class CreateCohortDto {
-  cohortPK: number;
+  cohortPk: number;
 
   @IsNotEmpty()
-  cohortID: string;
-
-  @IsNotEmpty()
-  cohortGroup: string;
+  cohortId: string;
 
   @IsNotEmpty()
   cohortName: string;
+
+  @IsNotEmpty()
+  cohortGroupId: number;
   validFrom: Date;
   validTo: Date;
-  latestFlag: 1;
-  activeFlag: 1;
+  latestFlag: number;
+  activeFlag: number;
   recordDateTime: Date;
-  companyTenantID: string;
+  companyTenantId: string;
 }

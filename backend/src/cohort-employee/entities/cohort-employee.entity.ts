@@ -4,7 +4,7 @@ import {
   Index,
   JoinColumn,
   ManyToOne,
-  PrimaryColumn,
+  PrimaryGeneratedColumn,
 } from 'typeorm';
 import { CohortEntity } from 'src/cohort/entities/cohort.entity';
 import { UserEntity } from 'src/user/entities/user.entity';
@@ -13,12 +13,8 @@ import { UserEntity } from 'src/user/entities/user.entity';
 @Index('Employee_FK', ['employeeFk'], {})
 @Entity('STG_Cohort_Emp')
 export class CohortEmployeeEntity {
-  /**
-   * ! This is a fake attribute
-   * This is a workaround for TypeORM's `MissingPrimaryColumnError`
-   **/
-  @PrimaryColumn({ type: 'uuid', insert: false, select: false, update: false })
-  id: never;
+  @PrimaryGeneratedColumn({ type: 'int', name: 'Cohort_Emp_PK' })
+  cohortEmpPk: number;
 
   @Column('int', { name: 'Cohort_FK', nullable: true })
   cohortFk: number | null;
@@ -48,11 +44,11 @@ export class CohortEmployeeEntity {
   @Column('varchar', { name: 'Employee_Role', nullable: true, length: 255 })
   employeeRole: string | null;
 
-  @Column('datetime', { name: 'Valid_From', nullable: true })
-  validFrom: Date | null;
+  @Column('date', { name: 'Valid_from', nullable: true })
+  validFrom: string | null;
 
-  @Column('datetime', { name: 'Valid_To', nullable: true })
-  validTo: Date | null;
+  @Column('date', { name: 'Valid_to', nullable: true })
+  validTo: string | null;
 
   @Column('tinyint', {
     name: 'Latest_Flag',
@@ -74,14 +70,14 @@ export class CohortEmployeeEntity {
   @Column('varchar', { name: 'Company_Tenant_ID', nullable: true, length: 255 })
   companyTenantId: string | null;
 
-  @ManyToOne(() => CohortEntity, (stgCohort) => stgCohort.CohortEmps, {
+  @ManyToOne(() => CohortEntity, (stgCohort) => stgCohort.cohortEmps, {
     onDelete: 'NO ACTION',
     onUpdate: 'NO ACTION',
   })
-  @JoinColumn([{ name: 'Cohort_FK', referencedColumnName: 'cohortPK' }])
+  @JoinColumn([{ name: 'Cohort_FK', referencedColumnName: 'cohortPk' }])
   cohortFk2: CohortEntity;
 
-  @ManyToOne(() => UserEntity, (stgEmployee) => stgEmployee.CohortEmps, {
+  @ManyToOne(() => UserEntity, (stgEmployee) => stgEmployee.cohortEmps, {
     onDelete: 'NO ACTION',
     onUpdate: 'NO ACTION',
   })

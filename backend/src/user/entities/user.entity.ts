@@ -84,5 +84,5 @@ export class UserEntity {
   companyTenantID: string | null;
 
   @OneToMany(() => CohortEmployeeEntity, (CohortEmp) => CohortEmp.employeeFk2)
-  CohortEmps: CohortEmployeeEntity[];
+  cohortEmps: CohortEmployeeEntity[];
 }

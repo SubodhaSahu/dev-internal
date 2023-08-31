@@ -17,38 +17,7 @@ export class CohortController {
 
   @Post()
   async create(@Body() createCohortDto: CreateCohortDto) {
-    return createCohortDto;
-    //Check if Cohort Group Exists. If exists then insert only the
-    //cohord infor else insert cohord group first then insert the cohord
-    const createCohortGroupDTO = JSON.parse(JSON.stringify(createCohortDto));
-    const cohortGroupExist = await this.cohortService.findCohortGroupByName(
-      createCohortGroupDTO.cohortGroup,
-    );
-    if (!cohortGroupExist) {
-      const newGroup =
-        await this.cohortService.createCohortGroup(createCohortGroupDTO);
-      console.log(newGroup);
-    }
-
-    const cohortNames = createCohortDto.cohortName;
-    const cohordEntities: any = [];
-
-    for (let i = 0; i < cohortNames.length; i++) {
-      const tempEntity: any = {};
-      tempEntity.cohortName = cohortNames[i];
-      tempEntity.cohortGroup = createCohortDto.cohortGroup;
-      tempEntity.cohortID = createCohortDto.cohortID;
-      tempEntity.validFrom = new Date();
-      tempEntity.validTo = new Date();
-      tempEntity.recordDateTime = new Date();
-      tempEntity.latestFlag = 1;
-      tempEntity.activeFlag = 1;
-      tempEntity.companyTenantID = 'R360';
-      cohordEntities.push(tempEntity);
-    }
-
-    return this.cohortService.create(cohordEntities);
-    return cohordEntities;
+    return this.cohortService.create(createCohortDto);
   }
 
   @Get()

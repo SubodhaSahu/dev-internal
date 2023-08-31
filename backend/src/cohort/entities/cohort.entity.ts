@@ -1,30 +1,39 @@
-import { Entity, Column, PrimaryGeneratedColumn, OneToMany } from 'typeorm';
+import {
+  Column,
+  Entity,
+  Index,
+  JoinColumn,
+  ManyToOne,
+  OneToMany,
+  PrimaryGeneratedColumn,
+} from 'typeorm';
+import { RegionEntity } from 'src/region/entities/region.entity';
 import { CohortEmployeeEntity } from 'src/cohort-employee/entities/cohort-employee.entity';
 
+@Index('fk_cohort_grp', ['cohortGroupId'], {})
 @Entity('STG_Cohort')
 export class CohortEntity {
   @PrimaryGeneratedColumn({ type: 'int', name: 'Cohort_PK' })
-  cohortPK: number;
+  cohortPk: number;
 
   @Column('varchar', { name: 'Cohort_ID', nullable: true, length: 255 })
-  cohortID: string | null;
-
-  @Column('varchar', { name: 'Cohort_Group', nullable: true, length: 255 })
-  cohortGroup: string | null;
+  cohortId: string | null;
 
   @Column('varchar', { name: 'Cohort_Name', nullable: true, length: 255 })
   cohortName: string | null;
 
-  @Column('datetime', { name: 'Valid_From', nullable: true })
-  validFrom: Date | null;
+  @Column('int', { name: 'Cohort_Group_ID' })
+  cohortGroupId: number;
 
-  @Column('datetime', { name: 'Valid_To', nullable: true })
-  validTo: Date | null;
+  @Column('date', { name: 'Valid_from', nullable: true })
+  validFrom: string | null;
+
+  @Column('date', { name: 'Valid_to', nullable: true })
+  validTo: string | null;
 
   @Column('tinyint', {
     name: 'Latest_Flag',
     nullable: true,
-    comment: '0 is false, 1 is true',
     default: () => "'1'",
   })
   latestFlag: number | null;
@@ -32,8 +41,7 @@ export class CohortEntity {
   @Column('tinyint', {
     name: 'Active_Flag',
     nullable: true,
-    comment: '0 is false, 1 is true',
-    default: () => "'0'",
+    default: () => "'1'",
   })
   activeFlag: number | null;
 
@@ -41,11 +49,20 @@ export class CohortEntity {
   recordDateTime: Date | null;
 
   @Column('varchar', { name: 'Company_Tenant_ID', nullable: true, length: 255 })
-  companyTenantID: string | null;
+  companyTenantId: string | null;
+
+  @ManyToOne(() => RegionEntity, (stgCohortGrp) => stgCohortGrp.cohorts, {
+    onDelete: 'CASCADE',
+    onUpdate: 'CASCADE',
+  })
+  @JoinColumn([
+    { name: 'Cohort_Group_ID', referencedColumnName: 'cohortGroupPk' },
+  ])
+  cohortGroup: RegionEntity;
 
   @OneToMany(
     () => CohortEmployeeEntity,
     (stgCohortEmp) => stgCohortEmp.cohortFk2,
   )
-  CohortEmps: CohortEmployeeEntity[];
+  cohortEmps: CohortEmployeeEntity[];
 }
