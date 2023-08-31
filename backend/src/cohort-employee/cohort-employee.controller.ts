@@ -1,7 +1,15 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  Body,
+  Patch,
+  Param,
+  Delete,
+} from '@nestjs/common';
 import { CohortEmployeeService } from './cohort-employee.service';
 import { CreateCohortEmployeeDto } from './dto/create-cohort-employee.dto';
-import { UpdateCohortEmployeeDto } from './dto/update-cohort-employee.dto';
+//import { UpdateCohortEmployeeDto } from './dto/update-cohort-employee.dto';
 
 @Controller('cohort-employee')
 export class CohortEmployeeController {
@@ -23,10 +31,9 @@ export class CohortEmployeeController {
   }
 
   @Patch(':id')
-  update(@Param('id') id: string, @Body() updateCohortEmployeeDto: UpdateCohortEmployeeDto) {
-    return this.cohortEmployeeService.update(+id, updateCohortEmployeeDto);
-  }
-
+  // update(@Param('id') id: string, @Body() updateCohortEmployeeDto: UpdateCohortEmployeeDto) {
+  //   return this.cohortEmployeeService.update(+id, updateCohortEmployeeDto);
+  // }
   @Delete(':id')
   remove(@Param('id') id: string) {
     return this.cohortEmployeeService.remove(+id);

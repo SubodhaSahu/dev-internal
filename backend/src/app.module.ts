@@ -6,6 +6,7 @@ import { AppService } from './app.service';
 import { CohortModule } from './cohort/cohort.module';
 import { UserModule } from './user/user.module';
 import { CohortEmployeeModule } from './cohort-employee/cohort-employee.module';
+import { RegionModule } from './region/region.module';
 import dbConfiguration from 'config/db.config';
 
 @Module({
@@ -23,6 +24,7 @@ import dbConfiguration from 'config/db.config';
     CohortModule,
     UserModule,
     CohortEmployeeModule,
+    RegionModule,
   ],
   controllers: [AppController],
   providers: [AppService],

@@ -36,7 +36,7 @@ export class UserController {
     const cohortdetals = await this.cohortService.findOne(
       parseInt(CreateUserDto.cohortId),
     );
-    cohortEmpDto.cohortId = cohortdetals.cohortID;
+    cohortEmpDto.cohortId = cohortdetals.cohortId;
     cohortEmpDto.cohortName = cohortdetals.cohortName;
     console.log(cohortEmpDto);
     console.log(employeePk);
