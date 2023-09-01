@@ -45,10 +45,10 @@ export class CohortEmployeeEntity {
   employeeRole: string | null;
 
   @Column('date', { name: 'Valid_from', nullable: true })
-  validFrom: string | null;
+  validFrom: Date | null;
 
   @Column('date', { name: 'Valid_to', nullable: true })
-  validTo: string | null;
+  validTo: Date | null;
 
   @Column('tinyint', {
     name: 'Latest_Flag',

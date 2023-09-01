@@ -6,7 +6,6 @@ import { Not, Repository } from 'typeorm';
 
 import { CohortEntity } from './entities/cohort.entity';
 import { InjectRepository } from '@nestjs/typeorm';
-//import { CreateCohortGroupDto } from './dto/create-cohort-group.dto';
 
 @Injectable()
 export class CohortService {
@@ -16,9 +15,8 @@ export class CohortService {
   ) {}
 
   async create(createCohortDto: CreateCohortDto) {
-    return createCohortDto;
-    // const cohortEntity = this.cohortRepository.create(createCohortDto);
-    // return await this.cohortRepository.insert(cohortEntity);
+    const cohortEntity = this.cohortRepository.create(createCohortDto);
+    return await this.cohortRepository.insert(cohortEntity);
   }
 
   async findAll() {
@@ -32,10 +30,8 @@ export class CohortService {
   }
 
   async update(id: number, data: UpdateCohortDto) {
-    console.log(id);
-    return data;
-    // await this.cohortRepository.update({ cohortPk: id }, data);
-    // return await this.cohortRepository.findOne({ where: { cohortPk: id } });
+    await this.cohortRepository.update({ cohortPk: id }, data);
+    return await this.cohortRepository.findOne({ where: { cohortPk: id } });
   }
 
   async remove(id: number) {
@@ -114,6 +110,5 @@ export class CohortService {
         cohortPk: id,
     }
     });
-   
   }
 }
