@@ -1,7 +1,7 @@
 import { IsNotEmpty } from 'class-validator';
 
 export class CreateRegionDto {
-  cohortGroupPK: number;
+  cohortGroupPk: number;
 
   @IsNotEmpty()
   CohortGroup: string;
