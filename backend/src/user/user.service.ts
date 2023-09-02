@@ -55,4 +55,16 @@ export class UserService {
   async remove(id: number) {
     return await this.userRepository.delete({ employeePk: id });
   }
+
+  async searchByEmail(email: string) {
+    return await this.userRepository.findOne({
+      where: {"email":email}
+  });
+  }
+
+  async searchByResearcherId(searchByResearcherId: string) {
+    return await this.userRepository.findOne({
+      where: {"employeeId":searchByResearcherId}
+  });
+  }
 }

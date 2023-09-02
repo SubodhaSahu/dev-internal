@@ -86,4 +86,14 @@ export class UserController {
   findDepartments() {
     return UserDepartment;
   }
+
+  @Get('/search/email/:email')
+  searchByEmail(@Param('email') email: string) {
+    return this.userService.searchByEmail(email);
+  }
+
+  @Get('/search/researcher_id/:researcherId')
+  searchByResearcherId(@Param('researcherId') researcherId: string) {
+    return this.userService.searchByResearcherId(researcherId);
+  }
 }
