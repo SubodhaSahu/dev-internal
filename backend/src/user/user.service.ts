@@ -85,4 +85,16 @@ export class UserService {
 
     return returnRes;
   }
+
+  async searchByEmail(email: string) {
+    return await this.userRepository.findOne({
+      where: { email: email },
+    });
+  }
+
+  async searchByResearcherId(searchByResearcherId: string) {
+    return await this.userRepository.findOne({
+      where: { employeeId: searchByResearcherId },
+    });
+  }
 }
