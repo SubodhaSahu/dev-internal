@@ -1,10 +1,19 @@
-import { Controller, Get, Param, Delete, Body, Post } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Param,
+  Delete,
+  Body,
+  Post,
+  Patch,
+} from '@nestjs/common';
 import { UserService } from './user.service';
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-import { CreateUserDto } from './dto/create-user.dto';
 import { CohortEmployeeService } from 'src/cohort-employee/cohort-employee.service';
 import { CohortService } from 'src/cohort/cohort.service';
-//import { UpdateUserDto } from './dto/update-user.dto';
+import { UpdateUserDto } from './dto/update-user.dto';
+import { UserRole } from 'config/userRole';
+import { UserDepartment } from 'config/userDepartments';
+import { CreateUserDto } from './dto/create-user.dto';
 
 @Controller('user')
 export class UserController {
@@ -15,17 +24,17 @@ export class UserController {
   ) {}
 
   @Post()
-  async create(@Body() CreateUserDto: CreateUserDto) {
-    const employeePk = await this.userService.create(CreateUserDto);
+  async create(@Body() createUserDto: CreateUserDto) {
+    const employeePk = await this.userService.create(createUserDto);
 
     //Create entity for the Cohort_Emp table.
     const cohortEmpDto: any = {};
-    cohortEmpDto.cohortFk = CreateUserDto.cohortId;
+    cohortEmpDto.cohortFk = createUserDto.cohortId;
     cohortEmpDto.employeeFk = employeePk;
-    cohortEmpDto.employeeId = CreateUserDto.employeeId;
-    cohortEmpDto.employeeName = CreateUserDto.firstName;
-    cohortEmpDto.employeeDepartment = CreateUserDto.department;
-    cohortEmpDto.employeeRole = CreateUserDto.role;
+    cohortEmpDto.employeeId = createUserDto.employeeId;
+    cohortEmpDto.employeeName = createUserDto.firstName;
+    cohortEmpDto.employeeDepartment = createUserDto.department;
+    cohortEmpDto.employeeRole = createUserDto.role;
     cohortEmpDto.validFrom = new Date();
     cohortEmpDto.validTo = new Date();
     cohortEmpDto.recordDateTime = new Date();
@@ -34,7 +43,7 @@ export class UserController {
     cohortEmpDto.companyTenantId = 'R360';
 
     const cohortdetals = await this.cohortService.findOne(
-      parseInt(CreateUserDto.cohortId),
+      parseInt(createUserDto.cohortId),
     );
     cohortEmpDto.cohortId = cohortdetals.cohortId;
     cohortEmpDto.cohortName = cohortdetals.cohortName;
@@ -54,13 +63,23 @@ export class UserController {
     return this.userService.findOne(+id);
   }
 
-  // @Patch(':id')
-  // update(@Param('id') id: string, @Body() updateUserDto: UpdateUserDto) {
-  //   return this.userService.update(+id, updateUserDto);
-  // }
+  @Patch(':id')
+  update(@Param('id') id: string, @Body() updateUserDto: UpdateUserDto) {
+    return this.userService.update(+id, updateUserDto);
+  }
 
   @Delete(':id')
   remove(@Param('id') id: string) {
     return this.userService.remove(+id);
+  }
+
+  @Get('/config/roles')
+  findRolers() {
+    return UserRole;
+  }
+
+  @Get('/config/departments')
+  findDepartments() {
+    return UserDepartment;
   }
 }

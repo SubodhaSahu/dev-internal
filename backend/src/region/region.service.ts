@@ -4,6 +4,7 @@ import { UpdateRegionDto } from './dto/update-region.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { RegionEntity } from './entities/region.entity';
 import { Repository } from 'typeorm';
+import { CohortEntity } from 'src/cohort/entities/cohort.entity';
 
 @Injectable()
 export class RegionService {
@@ -18,6 +19,21 @@ export class RegionService {
   }
 
   async findAll() {
+    const testRes = await this.regionRepository
+      .createQueryBuilder()
+      .select('region.cohortGroupPk', 'cohortGroupPk')
+      .addSelect(['cohort.cohortGroupId', 'cohortList.cohortGroupId'])
+      .from(RegionEntity, 'region')
+      .leftJoin(
+        CohortEntity,
+        'cohort',
+        'cohort.cohortGroupId = region.cohortGroupPk',
+      )
+      .getRawMany();
+    return testRes;
+
+    console.log(testRes);
+
     const regionResult = await this.regionRepository.find({
       select: ['cohortGroupPk', 'cohortGroup'],
       relations: ['cohorts', 'cohorts.cohortEmps'],

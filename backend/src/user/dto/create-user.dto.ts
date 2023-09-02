@@ -1,4 +1,6 @@
-import { IsNotEmpty } from 'class-validator';
+import { IsEnum, IsNotEmpty } from 'class-validator';
+import { UserDepartment } from 'config/userDepartments';
+import { UserRole } from 'config/userRole';
 
 export class CreateUserDto {
   @IsNotEmpty()
@@ -17,9 +19,11 @@ export class CreateUserDto {
   managerId: string;
 
   @IsNotEmpty()
+  @IsEnum(UserDepartment)
   department: string;
 
   @IsNotEmpty()
+  @IsEnum(UserRole)
   role: string;
 
   @IsNotEmpty()
