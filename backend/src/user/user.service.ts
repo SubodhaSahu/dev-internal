@@ -55,4 +55,34 @@ export class UserService {
   async remove(id: number) {
     return await this.userRepository.delete({ employeePk: id });
   }
+
+  //get distince Role
+  async userRoles() {
+    const roles = await this.userRepository
+      .createQueryBuilder()
+      .select('Role', 'role')
+      .distinct(true)
+      .getRawMany();
+    const returnRes = [];
+    roles.map((role) => {
+      returnRes.push(role.role);
+    });
+
+    return returnRes;
+  }
+
+  //get distince Department
+  async userDepartments() {
+    const departments = await this.userRepository
+      .createQueryBuilder()
+      .select('Department', 'department')
+      .distinct(true)
+      .getRawMany();
+    const returnRes = [];
+    departments.map((department) => {
+      returnRes.push(department.department);
+    });
+
+    return returnRes;
+  }
 }
