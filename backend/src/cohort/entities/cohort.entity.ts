@@ -9,9 +9,10 @@ import {
 } from 'typeorm';
 import { RegionEntity } from 'src/region/entities/region.entity';
 import { CohortEmployeeEntity } from 'src/cohort-employee/entities/cohort-employee.entity';
+import { SCHEMAS } from 'config/tables';
 
 @Index('fk_cohort_grp', ['cohortGroupId'], {})
-@Entity('STG_Cohort')
+@Entity(SCHEMAS.cohort)
 export class CohortEntity {
   @PrimaryGeneratedColumn({ type: 'int', name: 'Cohort_PK' })
   cohortPk: number;

@@ -10,6 +10,8 @@ import {
 import { CohortService } from './cohort.service';
 import { CreateCohortDto } from './dto/create-cohort.dto';
 import { UpdateCohortDto } from './dto/update-cohort.dto';
+// import { HttpException } from '@nestjs/common/exceptions';
+// import { HttpStatus } from '@nestjs/common/enums';
 
 @Controller('cohort')
 export class CohortController {
@@ -33,7 +35,11 @@ export class CohortController {
 
   @Patch(':id')
   update(@Param('id') id: string, @Body() updateCohortDto: UpdateCohortDto) {
-    return this.cohortService.update(+id, updateCohortDto);
+    try {
+      return this.cohortService.update(+id, updateCohortDto);
+    } catch (e) {
+      return false;
+    }
   }
 
   @Delete(':id')
@@ -44,5 +50,4 @@ export class CohortController {
   findEmployeeCohort(@Param('id') id: string) {
     return this.cohortService.findEmployeeCohort(+id);
   }
-
 }

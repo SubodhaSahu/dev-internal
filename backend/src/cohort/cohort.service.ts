@@ -7,6 +7,9 @@ import { Not, Repository } from 'typeorm';
 import { CohortEntity } from './entities/cohort.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 
+import { HttpException } from '@nestjs/common/exceptions';
+import { HttpStatus } from '@nestjs/common/enums';
+
 @Injectable()
 export class CohortService {
   constructor(
@@ -15,8 +18,12 @@ export class CohortService {
   ) {}
 
   async create(createCohortDto: CreateCohortDto) {
-    const cohortEntity = this.cohortRepository.create(createCohortDto);
-    return await this.cohortRepository.insert(cohortEntity);
+    try {
+      const cohortEntity = this.cohortRepository.create(createCohortDto);
+      return await this.cohortRepository.insert(cohortEntity);
+    } catch (exception) {
+      throw new HttpException(exception.message, HttpStatus.BAD_REQUEST);
+    }
   }
 
   async findAll() {
@@ -30,8 +37,12 @@ export class CohortService {
   }
 
   async update(id: number, data: UpdateCohortDto) {
-    await this.cohortRepository.update({ cohortPk: id }, data);
-    return await this.cohortRepository.findOne({ where: { cohortPk: id } });
+    try {
+      await this.cohortRepository.update({ cohortPk: id }, data);
+      return await this.cohortRepository.findOne({ where: { cohortPk: id } });
+    } catch (exception) {
+      throw new HttpException(exception.message, HttpStatus.BAD_REQUEST);
+    }
   }
 
   async remove(id: number) {
@@ -103,12 +114,12 @@ export class CohortService {
       .getRawMany();
     return cohortEmp;
   }
-  async findEmployeeCohort(id: number){
-    return  await this.cohortRepository.find({
+  async findEmployeeCohort(id: number) {
+    return await this.cohortRepository.find({
       relations: ['cohortEmps'],
       where: {
         cohortPk: id,
-    }
+      },
     });
   }
 }

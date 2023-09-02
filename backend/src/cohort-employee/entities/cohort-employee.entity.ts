@@ -8,10 +8,11 @@ import {
 } from 'typeorm';
 import { CohortEntity } from 'src/cohort/entities/cohort.entity';
 import { UserEntity } from 'src/user/entities/user.entity';
+import { SCHEMAS } from 'config/tables';
 
 @Index('Cohort_FK', ['cohortFk'], {})
 @Index('Employee_FK', ['employeeFk'], {})
-@Entity('STG_Cohort_Emp')
+@Entity(SCHEMAS.cohortEmp)
 export class CohortEmployeeEntity {
   @PrimaryGeneratedColumn({ type: 'int', name: 'Cohort_Emp_PK' })
   cohortEmpPk: number;
@@ -71,15 +72,15 @@ export class CohortEmployeeEntity {
   companyTenantId: string | null;
 
   @ManyToOne(() => CohortEntity, (stgCohort) => stgCohort.cohortEmps, {
-    onDelete: 'NO ACTION',
-    onUpdate: 'NO ACTION',
+    onDelete: 'CASCADE',
+    onUpdate: 'CASCADE',
   })
   @JoinColumn([{ name: 'Cohort_FK', referencedColumnName: 'cohortPk' }])
   cohortFk2: CohortEntity;
 
   @ManyToOne(() => UserEntity, (stgEmployee) => stgEmployee.cohortEmps, {
-    onDelete: 'NO ACTION',
-    onUpdate: 'NO ACTION',
+    onDelete: 'CASCADE',
+    onUpdate: 'CASCADE',
   })
   @JoinColumn([{ name: 'Employee_FK', referencedColumnName: 'employeePk' }])
   employeeFk2: UserEntity;

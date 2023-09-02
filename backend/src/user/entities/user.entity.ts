@@ -8,10 +8,9 @@ import {
   //   JoinColumn,
 } from 'typeorm';
 import { CohortEmployeeEntity } from 'src/cohort-employee/entities/cohort-employee.entity';
+import { SCHEMAS } from 'config/tables';
 
-//import { CohortEntity } from 'src/cohort/entities/cohort.entity';
-
-@Entity('STG_Employee')
+@Entity(SCHEMAS.user)
 export class UserEntity {
   @PrimaryGeneratedColumn({ type: 'int', name: 'Employee_PK' })
   employeePk: number;

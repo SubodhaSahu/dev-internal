@@ -6,6 +6,8 @@ import {
   Body,
   Post,
   Patch,
+  HttpException,
+  HttpStatus,
 } from '@nestjs/common';
 import { UserService } from './user.service';
 import { CohortEmployeeService } from 'src/cohort-employee/cohort-employee.service';
@@ -25,32 +27,33 @@ export class UserController {
 
   @Post()
   async create(@Body() createUserDto: CreateUserDto) {
-    const employeePk = await this.userService.create(createUserDto);
+    try {
+      const employeePk = await this.userService.create(createUserDto);
 
-    //Create entity for the Cohort_Emp table.
-    const cohortEmpDto: any = {};
-    cohortEmpDto.cohortFk = createUserDto.cohortId;
-    cohortEmpDto.employeeFk = employeePk;
-    cohortEmpDto.employeeId = createUserDto.employeeId;
-    cohortEmpDto.employeeName = createUserDto.firstName;
-    cohortEmpDto.employeeDepartment = createUserDto.department;
-    cohortEmpDto.employeeRole = createUserDto.role;
-    cohortEmpDto.validFrom = new Date();
-    cohortEmpDto.validTo = new Date();
-    cohortEmpDto.recordDateTime = new Date();
-    cohortEmpDto.latestFlag = 1;
-    cohortEmpDto.activeFlag = 1;
-    cohortEmpDto.companyTenantId = 'R360';
+      //Create entity for the Cohort_Emp table.
+      const cohortEmpDto: any = {};
+      cohortEmpDto.cohortFk = createUserDto.cohortId;
+      cohortEmpDto.employeeFk = employeePk;
+      cohortEmpDto.employeeId = createUserDto.employeeId;
+      cohortEmpDto.employeeName = createUserDto.firstName;
+      cohortEmpDto.employeeDepartment = createUserDto.department;
+      cohortEmpDto.employeeRole = createUserDto.role;
+      cohortEmpDto.validFrom = new Date();
+      cohortEmpDto.validTo = new Date();
+      cohortEmpDto.recordDateTime = new Date();
+      cohortEmpDto.latestFlag = 1;
+      cohortEmpDto.activeFlag = 1;
+      cohortEmpDto.companyTenantId = 'R360';
 
-    const cohortdetals = await this.cohortService.findOne(
-      parseInt(createUserDto.cohortId),
-    );
-    cohortEmpDto.cohortId = cohortdetals.cohortId;
-    cohortEmpDto.cohortName = cohortdetals.cohortName;
-    console.log(cohortEmpDto);
-    console.log(employeePk);
-    console.log(cohortdetals);
-    return this.cohortEmpService.create(cohortEmpDto);
+      const cohortdetals = await this.cohortService.findOne(
+        parseInt(createUserDto.cohortId),
+      );
+      cohortEmpDto.cohortId = cohortdetals.cohortId;
+      cohortEmpDto.cohortName = cohortdetals.cohortName;
+      return this.cohortEmpService.create(cohortEmpDto);
+    } catch (exception) {
+      throw new HttpException(exception.message, HttpStatus.BAD_REQUEST);
+    }
   }
 
   @Get()
@@ -69,7 +72,8 @@ export class UserController {
   }
 
   @Delete(':id')
-  remove(@Param('id') id: string) {
+  async remove(@Param('id') id: string) {
+    await this.cohortEmpService.deleteEmployee(+id);
     return this.userService.remove(+id);
   }
 

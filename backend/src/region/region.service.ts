@@ -4,7 +4,6 @@ import { UpdateRegionDto } from './dto/update-region.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { RegionEntity } from './entities/region.entity';
 import { Repository } from 'typeorm';
-import { CohortEntity } from 'src/cohort/entities/cohort.entity';
 
 @Injectable()
 export class RegionService {
@@ -19,46 +18,20 @@ export class RegionService {
   }
 
   async findAll() {
-    const testRes = await this.regionRepository
-      .createQueryBuilder()
-      .select('region.cohortGroupPk', 'cohortGroupPk')
-      .addSelect(['cohort.cohortGroupId', 'cohortList.cohortGroupId'])
-      .from(RegionEntity, 'region')
-      .leftJoin(
-        CohortEntity,
-        'cohort',
-        'cohort.cohortGroupId = region.cohortGroupPk',
-      )
-      .getRawMany();
-    return testRes;
-
-    console.log(testRes);
-
-    const regionResult = await this.regionRepository.find({
+    const regionResult: RegionEntity[] = await this.regionRepository.find({
       select: ['cohortGroupPk', 'cohortGroup'],
       relations: ['cohorts', 'cohorts.cohortEmps'],
     });
-    const returnRes = regionResult.map((region) => ({
-      cohertGroupId: region.cohortGroupPk,
-      cohertGroupName: region.cohortGroup,
-      cohertList: region.cohorts.map((cohort) => ({
-        cohortId: cohort.cohortPk,
-        cohortName: cohort.cohortName,
-        memberCount: cohort.cohortEmps.length,
-        employees: cohort.cohortEmps.map((employee) => ({
-          employeeName: employee.employeeName,
-          employeeId: employee.employeeId,
-          employeeRole: employee.employeeRole,
-        })),
-      })),
-    }));
-    return returnRes;
+    return this.mapRegionResult(regionResult);
   }
 
   async findOne(id: number) {
-    return await this.regionRepository.findOne({
+    const regionResult: RegionEntity[] = await this.regionRepository.find({
+      select: ['cohortGroupPk', 'cohortGroup'],
+      relations: ['cohorts', 'cohorts.cohortEmps'],
       where: { cohortGroupPk: id },
     });
+    return this.mapRegionResult(regionResult)[0];
   }
 
   update(id: number, updateRegionDto: UpdateRegionDto) {
@@ -68,5 +41,25 @@ export class RegionService {
 
   remove(id: number) {
     return `This action removes a #${id} region`;
+  }
+  mapRegionResult(regionResult: RegionEntity[]) {
+    return regionResult.map((region) => ({
+      cohortGroupPk: region.cohortGroupPk,
+      cohertGroupId: region.cohortGroupPk,
+      cohertGroupName: region.cohortGroup,
+      cohertList: region.cohorts.map((cohort) => ({
+        cohortPk: cohort.cohortPk,
+        cohortId: cohort.cohortPk,
+        cohortName: cohort.cohortName,
+        memberCount: cohort.cohortEmps.length,
+        employees: cohort.cohortEmps.map((employee) => ({
+          employeePk: employee.employeeFk,
+          employeeName: employee.employeeName,
+          employeeId: employee.employeeId,
+          employeeRole: employee.employeeRole,
+          employeeDepartment: employee.employeeDepartment,
+        })),
+      })),
+    }));
   }
 }

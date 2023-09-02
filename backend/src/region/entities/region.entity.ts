@@ -6,8 +6,9 @@ import {
   OneToMany,
   PrimaryGeneratedColumn,
 } from 'typeorm';
+import { SCHEMAS } from 'config/tables';
 
-@Entity('STG_Cohort_Group')
+@Entity(SCHEMAS.region)
 export class RegionEntity {
   @PrimaryGeneratedColumn({ type: 'int', name: 'Cohort_Group_PK' })
   cohortGroupPk: number;
