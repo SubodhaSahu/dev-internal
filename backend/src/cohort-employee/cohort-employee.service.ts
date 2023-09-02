@@ -39,4 +39,8 @@ export class CohortEmployeeService {
   async remove(id: number) {
     return await this.cohortEmp.delete({ employeeFk: id });
   }
+
+  async deleteEmployee(id: number) {
+    return await this.cohortEmp.delete({ employeeFk: id });
+  }
 }

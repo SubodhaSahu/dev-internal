@@ -6,6 +6,8 @@ import {
   Body,
   Post,
   Patch,
+  HttpException,
+  HttpStatus,
 } from '@nestjs/common';
 import { UserService } from './user.service';
 import { CohortEmployeeService } from 'src/cohort-employee/cohort-employee.service';
@@ -48,12 +50,9 @@ export class UserController {
       );
       cohortEmpDto.cohortId = cohortdetals.cohortId;
       cohortEmpDto.cohortName = cohortdetals.cohortName;
-      console.log(cohortEmpDto);
-      console.log(employeePk);
-      console.log(cohortdetals);
       return this.cohortEmpService.create(cohortEmpDto);
-    } catch (e) {
-      console.log(e);
+    } catch (exception) {
+      throw new HttpException(exception.message, HttpStatus.BAD_REQUEST);
     }
   }
 
@@ -73,7 +72,8 @@ export class UserController {
   }
 
   @Delete(':id')
-  remove(@Param('id') id: string) {
+  async remove(@Param('id') id: string) {
+    await this.cohortEmpService.deleteEmployee(+id);
     return this.userService.remove(+id);
   }
 
