@@ -10,16 +10,20 @@ import {
   Delete,
 } from '@nestjs/common';
 import { CohortEmployeeService } from './cohort-employee.service';
+import { CohortService } from 'src/cohort/cohort.service';
 import { CreateCohortEmployeeDto } from './dto/create-cohort-employee.dto';
 import { UpdateCohortEmployeeDto } from './dto/update-cohort-employee.dto';
 import addCommonDbFields from 'utility/commonField';
 
 @Controller('cohort-employee')
 export class CohortEmployeeController {
-  constructor(private readonly cohortEmployeeService: CohortEmployeeService) {}
+  constructor(
+    private readonly cohortEmployeeService: CohortEmployeeService,
+    private cohortService: CohortService,
+  ) {}
 
   @Post()
-  async reate(@Body() createCohortEmployeeDto: CreateCohortEmployeeDto) {
+  async create(@Body() createCohortEmployeeDto: CreateCohortEmployeeDto) {
     try {
       //Check if the cohort_employee table already have a record for the particular employee in the same cohort.
       const cohortEmpRecord =
@@ -36,6 +40,14 @@ export class CohortEmployeeController {
         );
       } else {
         //Insert
+
+        //Get Cohort details and add it.
+        const cohortDetails = await this.cohortService.findOne(
+          +createCohortEmployeeDto.cohortFk,
+        );
+        createCohortEmployeeDto.cohortName = cohortDetails.cohortName;
+        createCohortEmployeeDto.cohortId = cohortDetails.cohortId;
+
         //Add the common field such as latestFlag, activeFlag, validateForm, validateTo
         createCohortEmployeeDto = addCommonDbFields(createCohortEmployeeDto);
         return this.cohortEmployeeService.create(createCohortEmployeeDto);
