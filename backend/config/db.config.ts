@@ -11,5 +11,6 @@ export default registerAs('database', () => {
     database: process.env.DB_DATABASE,
     autoLoadEntities: true,
     entities: [],
+    synchronize: false,
   };
 });
