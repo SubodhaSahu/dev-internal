@@ -20,7 +20,9 @@ export class CohortService {
   async create(createCohortDto: CreateCohortDto) {
     try {
       const cohortEntity = this.cohortRepository.create(createCohortDto);
-      return await this.cohortRepository.insert(cohortEntity);
+      const newCohort = await this.cohortRepository.insert(cohortEntity);
+      const cohortPk = newCohort.identifiers[0].cohortPk;
+      return this.findOne(cohortPk);
     } catch (exception) {
       throw new HttpException(exception.message, HttpStatus.BAD_REQUEST);
     }
@@ -49,21 +51,6 @@ export class CohortService {
     await this.cohortRepository.delete({ cohortPk: id });
     return { deleted: true };
   }
-
-  // async createCohortGroup(createCohortGroupDto: CreateCohortDto) {
-  //   createCohortGroupDto.cohortName = '';
-  //   createCohortGroupDto.cohortId = '0';
-  //   createCohortGroupDto.validFrom = new Date();
-  //   createCohortGroupDto.validTo = new Date();
-  //   createCohortGroupDto.recordDateTime = new Date();
-  //   createCohortGroupDto.latestFlag = 1;
-  //   createCohortGroupDto.activeFlag = 1;
-  //   createCohortGroupDto.companyTenantId = 'R360';
-  //   const cohortGroupEntity =
-  //     this.cohortRepository.create(createCohortGroupDto);
-  //   await this.cohortRepository.save(cohortGroupEntity);
-  //   return cohortGroupEntity;
-  // }
 
   async findCohortGroup() {
     const cohortGroups: any = await this.cohortRepository
@@ -119,6 +106,14 @@ export class CohortService {
       relations: ['cohortEmps'],
       where: {
         cohortPk: id,
+      },
+    });
+  }
+
+  async findByCohortId(cohortId: string) {
+    return await this.cohortRepository.findOne({
+      where: {
+        cohortId: cohortId,
       },
     });
   }

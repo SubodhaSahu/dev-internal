@@ -11,20 +11,31 @@ import {
 } from '@nestjs/common';
 import { CohortEmployeeService } from './cohort-employee.service';
 import { CohortService } from 'src/cohort/cohort.service';
+import { UserService } from 'src/user/user.service';
 import { CreateCohortEmployeeDto } from './dto/create-cohort-employee.dto';
 import { UpdateCohortEmployeeDto } from './dto/update-cohort-employee.dto';
 import addCommonDbFields from 'utility/commonField';
+import { EMPRECNOTFOUND } from 'config/message';
 
 @Controller('cohort-employee')
 export class CohortEmployeeController {
   constructor(
     private readonly cohortEmployeeService: CohortEmployeeService,
     private cohortService: CohortService,
+    private userService: UserService,
   ) {}
 
   @Post()
   async create(@Body() createCohortEmployeeDto: CreateCohortEmployeeDto) {
     try {
+      //Check if employee present in the user table or not
+      const empRecord = await this.userService.findOne(
+        createCohortEmployeeDto.employeeFk,
+      );
+      if (!empRecord) {
+        throw new HttpException(EMPRECNOTFOUND, HttpStatus.BAD_REQUEST);
+      }
+
       //Check if the cohort_employee table already have a record for the particular employee in the same cohort.
       const cohortEmpRecord =
         await this.cohortEmployeeService.findByEmpIdandCohortId(
@@ -47,9 +58,12 @@ export class CohortEmployeeController {
         );
         createCohortEmployeeDto.cohortName = cohortDetails.cohortName;
         createCohortEmployeeDto.cohortId = cohortDetails.cohortId;
+        createCohortEmployeeDto.employeeId = empRecord.employeeId;
 
         //Add the common field such as latestFlag, activeFlag, validateForm, validateTo
         createCohortEmployeeDto = addCommonDbFields(createCohortEmployeeDto);
+        createCohortEmployeeDto.validFrom = empRecord.validFrom;
+        createCohortEmployeeDto.validTo = empRecord.validTo;
         return this.cohortEmployeeService.create(createCohortEmployeeDto);
       }
     } catch (exception) {
