@@ -21,8 +21,20 @@ export class CohortController {
   @Post()
   async create(@Body() createCohortDto: CreateCohortDto) {
     try {
-      createCohortDto = addCommonDbFields(createCohortDto);
-      return this.cohortService.create(createCohortDto);
+      const cohortCheck = await this.cohortService.findByCohortId(
+        createCohortDto.cohortId,
+      );
+
+      //If Cohort Present then update else insert
+      if (cohortCheck) {
+        return this.cohortService.update(
+          +cohortCheck.cohortPk,
+          createCohortDto,
+        );
+      } else {
+        createCohortDto = addCommonDbFields(createCohortDto);
+        return this.cohortService.create(createCohortDto);
+      }
     } catch (exception) {
       throw new HttpException(exception.message, HttpStatus.BAD_REQUEST);
     }

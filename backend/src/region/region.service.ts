@@ -62,4 +62,10 @@ export class RegionService {
       })),
     }));
   }
+
+  async findByGroupName(groupName: string) {
+    return await this.regionRepository.findOne({
+      where: { cohortGroup: groupName },
+    });
+  }
 }

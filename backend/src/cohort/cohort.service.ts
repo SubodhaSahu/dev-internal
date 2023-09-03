@@ -52,21 +52,6 @@ export class CohortService {
     return { deleted: true };
   }
 
-  // async createCohortGroup(createCohortGroupDto: CreateCohortDto) {
-  //   createCohortGroupDto.cohortName = '';
-  //   createCohortGroupDto.cohortId = '0';
-  //   createCohortGroupDto.validFrom = new Date();
-  //   createCohortGroupDto.validTo = new Date();
-  //   createCohortGroupDto.recordDateTime = new Date();
-  //   createCohortGroupDto.latestFlag = 1;
-  //   createCohortGroupDto.activeFlag = 1;
-  //   createCohortGroupDto.companyTenantId = 'R360';
-  //   const cohortGroupEntity =
-  //     this.cohortRepository.create(createCohortGroupDto);
-  //   await this.cohortRepository.save(cohortGroupEntity);
-  //   return cohortGroupEntity;
-  // }
-
   async findCohortGroup() {
     const cohortGroups: any = await this.cohortRepository
       .createQueryBuilder('STG_Cohort')
@@ -121,6 +106,14 @@ export class CohortService {
       relations: ['cohortEmps'],
       where: {
         cohortPk: id,
+      },
+    });
+  }
+
+  async findByCohortId(cohortId: string) {
+    return await this.cohortRepository.findOne({
+      where: {
+        cohortId: cohortId,
       },
     });
   }
