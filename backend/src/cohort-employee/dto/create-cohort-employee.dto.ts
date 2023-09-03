@@ -11,8 +11,6 @@ export class CreateCohortEmployeeDto {
   @IsNotEmpty()
   @Expose({ name: 'employeePk' })
   employeeFk: number;
-
-  @IsNotEmpty()
   employeeId: string;
 
   @IsNotEmpty()

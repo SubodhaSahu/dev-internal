@@ -58,9 +58,12 @@ export class CohortEmployeeController {
         );
         createCohortEmployeeDto.cohortName = cohortDetails.cohortName;
         createCohortEmployeeDto.cohortId = cohortDetails.cohortId;
+        createCohortEmployeeDto.employeeId = empRecord.employeeId;
 
         //Add the common field such as latestFlag, activeFlag, validateForm, validateTo
         createCohortEmployeeDto = addCommonDbFields(createCohortEmployeeDto);
+        createCohortEmployeeDto.validFrom = empRecord.validFrom;
+        createCohortEmployeeDto.validTo = empRecord.validTo;
         return this.cohortEmployeeService.create(createCohortEmployeeDto);
       }
     } catch (exception) {
