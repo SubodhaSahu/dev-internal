@@ -15,5 +15,6 @@ import { CohortModule } from 'src/cohort/cohort.module';
   ],
   controllers: [UserController],
   providers: [UserService],
+  exports: [UserService],
 })
 export class UserModule {}

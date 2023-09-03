@@ -20,7 +20,9 @@ export class CohortService {
   async create(createCohortDto: CreateCohortDto) {
     try {
       const cohortEntity = this.cohortRepository.create(createCohortDto);
-      return await this.cohortRepository.insert(cohortEntity);
+      const newCohort = await this.cohortRepository.insert(cohortEntity);
+      const cohortPk = newCohort.identifiers[0].cohortPk;
+      return this.findOne(cohortPk);
     } catch (exception) {
       throw new HttpException(exception.message, HttpStatus.BAD_REQUEST);
     }

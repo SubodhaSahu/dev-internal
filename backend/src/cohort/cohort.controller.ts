@@ -10,8 +10,9 @@ import {
 import { CohortService } from './cohort.service';
 import { CreateCohortDto } from './dto/create-cohort.dto';
 import { UpdateCohortDto } from './dto/update-cohort.dto';
-// import { HttpException } from '@nestjs/common/exceptions';
-// import { HttpStatus } from '@nestjs/common/enums';
+import { HttpException } from '@nestjs/common/exceptions';
+import { HttpStatus } from '@nestjs/common/enums';
+import addCommonDbFields from 'utility/commonField';
 
 @Controller('cohort')
 export class CohortController {
@@ -19,13 +20,17 @@ export class CohortController {
 
   @Post()
   async create(@Body() createCohortDto: CreateCohortDto) {
-    return this.cohortService.create(createCohortDto);
+    try {
+      createCohortDto = addCommonDbFields(createCohortDto);
+      return this.cohortService.create(createCohortDto);
+    } catch (exception) {
+      throw new HttpException(exception.message, HttpStatus.BAD_REQUEST);
+    }
   }
 
   @Get()
   findAll() {
     return this.cohortService.findAll();
-    //return `This action returns all cats`;
   }
 
   @Get(':id')
@@ -37,8 +42,8 @@ export class CohortController {
   update(@Param('id') id: string, @Body() updateCohortDto: UpdateCohortDto) {
     try {
       return this.cohortService.update(+id, updateCohortDto);
-    } catch (e) {
-      return false;
+    } catch (exception) {
+      throw new HttpException(exception.message, HttpStatus.BAD_REQUEST);
     }
   }
 
