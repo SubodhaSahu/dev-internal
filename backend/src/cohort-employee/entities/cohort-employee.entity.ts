@@ -6,9 +6,9 @@ import {
   ManyToOne,
   PrimaryGeneratedColumn,
 } from 'typeorm';
-import { CohortEntity } from 'src/cohort/entities/cohort.entity';
-import { UserEntity } from 'src/user/entities/user.entity';
-import { SCHEMAS } from 'config/tables';
+import { CohortEntity } from '../../cohort/entities/cohort.entity';
+import { UserEntity } from '../../user/entities/user.entity';
+import { SCHEMAS } from '../../../config/tables';
 
 @Index('Cohort_FK', ['cohortFk'], {})
 @Index('Employee_FK', ['employeeFk'], {})

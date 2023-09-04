@@ -9,10 +9,10 @@ import {
   HttpStatus,
 } from '@nestjs/common';
 import { RegionService } from './region.service';
-import { CohortService } from 'src/cohort/cohort.service';
+import { CohortService } from '../cohort/cohort.service';
 import { CreateRegionDto } from './dto/create-region.dto';
-import addCommonDbFields from 'utility/commonField';
-import { CreateCohortDto } from 'src/cohort/dto/create-cohort.dto';
+import addCommonDbFields from '../../utility/commonField';
+import { CreateCohortDto } from '../cohort/dto/create-cohort.dto';
 //import { UpdateRegionDto } from './dto/update-region.dto';
 
 @Controller('region')

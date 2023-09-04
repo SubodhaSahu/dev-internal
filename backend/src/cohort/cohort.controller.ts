@@ -12,7 +12,7 @@ import { CreateCohortDto } from './dto/create-cohort.dto';
 import { UpdateCohortDto } from './dto/update-cohort.dto';
 import { HttpException } from '@nestjs/common/exceptions';
 import { HttpStatus } from '@nestjs/common/enums';
-import addCommonDbFields from 'utility/commonField';
+import addCommonDbFields from '../../utility/commonField';
 
 @Controller('cohort')
 export class CohortController {

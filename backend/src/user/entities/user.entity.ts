@@ -7,8 +7,8 @@ import {
   //   ManyToOne,
   //   JoinColumn,
 } from 'typeorm';
-import { CohortEmployeeEntity } from 'src/cohort-employee/entities/cohort-employee.entity';
-import { SCHEMAS } from 'config/tables';
+import { CohortEmployeeEntity } from '../../cohort-employee/entities/cohort-employee.entity';
+import { SCHEMAS } from '../../../config/tables';
 
 @Entity(SCHEMAS.user)
 export class UserEntity {
