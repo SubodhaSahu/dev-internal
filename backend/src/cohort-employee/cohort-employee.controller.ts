@@ -10,12 +10,12 @@ import {
   Delete,
 } from '@nestjs/common';
 import { CohortEmployeeService } from './cohort-employee.service';
-import { CohortService } from 'src/cohort/cohort.service';
-import { UserService } from 'src/user/user.service';
+import { CohortService } from '../cohort/cohort.service';
+import { UserService } from '../user/user.service';
 import { CreateCohortEmployeeDto } from './dto/create-cohort-employee.dto';
 import { UpdateCohortEmployeeDto } from './dto/update-cohort-employee.dto';
-import addCommonDbFields from 'utility/commonField';
-import { EMPRECNOTFOUND } from 'config/message';
+import addCommonDbFields from '../../utility/commonField';
+import { COHORTRECNOTFOUND, EMPRECNOTFOUND } from '../../config/message';
 
 @Controller('cohort-employee')
 export class CohortEmployeeController {
@@ -56,6 +56,9 @@ export class CohortEmployeeController {
         const cohortDetails = await this.cohortService.findOne(
           +createCohortEmployeeDto.cohortFk,
         );
+        if (!cohortDetails) {
+          throw new HttpException(COHORTRECNOTFOUND, HttpStatus.BAD_REQUEST);
+        }
         createCohortEmployeeDto.cohortName = cohortDetails.cohortName;
         createCohortEmployeeDto.cohortId = cohortDetails.cohortId;
         createCohortEmployeeDto.employeeId = empRecord.employeeId;
@@ -93,5 +96,47 @@ export class CohortEmployeeController {
   @Delete(':id')
   remove(@Param('id') id: string) {
     return this.cohortEmployeeService.remove(+id);
+  }
+
+  @Post(':id/add-multiple-users')
+  async addMultiUsers(
+    @Param('id') cohortPk: string,
+    @Body() createCohortEmployeeDtos: { cohortEmp: CreateCohortEmployeeDto[] },
+  ) {
+    // console.log(cohortPk);
+    // return createCohortEmployeeDto;
+    // Get Cohort details and add it.
+    const cohortDetails = await this.cohortService.findOne(+cohortPk);
+    if (!cohortDetails) {
+      throw new HttpException(COHORTRECNOTFOUND, HttpStatus.BAD_REQUEST);
+    }
+    // return createCohortEmployeeDtos.cohortEmp;
+    console.log(createCohortEmployeeDtos.cohortEmp);
+    //return createCohortEmployeeDtos
+    const cohortEmps = createCohortEmployeeDtos.cohortEmp;
+
+    const batchCohortEmp = await Promise.all(
+      cohortEmps.map(async (cohortEmp) => {
+        const empRecord = await this.userService.findOne(cohortEmp.employeeFk);
+        console.log(empRecord);
+        if (!empRecord) {
+          throw new HttpException(EMPRECNOTFOUND, HttpStatus.BAD_REQUEST);
+        }
+        cohortEmp.cohortFk = +cohortPk;
+        cohortEmp.cohortName = cohortDetails.cohortName;
+        cohortEmp.cohortId = cohortDetails.cohortId;
+        cohortEmp.employeeId = empRecord.employeeId;
+        cohortEmp.employeeFk = empRecord.employeePk;
+
+        //Add the common field such as latestFlag, activeFlag, validateForm, validateTo
+        cohortEmp = addCommonDbFields(cohortEmp);
+        cohortEmp.validFrom = empRecord.validFrom;
+        cohortEmp.validTo = empRecord.validTo;
+        return cohortEmp;
+      }),
+    );
+
+    return this.cohortEmployeeService.addMultipleUsers(batchCohortEmp);
+    //return 'Multi User';
   }
 }

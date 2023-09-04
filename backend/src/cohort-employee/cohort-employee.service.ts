@@ -57,4 +57,18 @@ export class CohortEmployeeService {
   async deleteEmpFromCohort(id: number, cohortId: number) {
     return await this.cohortEmp.delete({ employeeFk: id, cohortFk: cohortId });
   }
+
+  async addMultipleUsers(createCohortEmployeeDto: CreateCohortEmployeeDto[]) {
+    try {
+      await this.cohortEmp
+        .createQueryBuilder()
+        .insert()
+        .into(CohortEmployeeEntity)
+        .values(createCohortEmployeeDto)
+        .orUpdate(['Cohort_ID', 'Employee_ID'], ['Employee_Name'])
+        .execute();
+    } catch (exception) {
+      throw new HttpException(exception.message, HttpStatus.BAD_REQUEST);
+    }
+  }
 }

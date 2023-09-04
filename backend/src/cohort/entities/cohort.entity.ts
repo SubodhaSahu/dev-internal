@@ -7,9 +7,9 @@ import {
   OneToMany,
   PrimaryGeneratedColumn,
 } from 'typeorm';
-import { RegionEntity } from 'src/region/entities/region.entity';
-import { CohortEmployeeEntity } from 'src/cohort-employee/entities/cohort-employee.entity';
-import { SCHEMAS } from 'config/tables';
+import { RegionEntity } from '../../region/entities/region.entity';
+import { CohortEmployeeEntity } from '../../cohort-employee/entities/cohort-employee.entity';
+import { SCHEMAS } from '../../../config/tables';
 
 @Index('fk_cohort_grp', ['cohortGroupId'], {})
 @Entity(SCHEMAS.cohort)

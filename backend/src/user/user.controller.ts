@@ -1,7 +1,7 @@
 import { Controller, Get, Param, Delete } from '@nestjs/common';
 import { UserService } from './user.service';
-import { CohortEmployeeService } from 'src/cohort-employee/cohort-employee.service';
-import { CohortService } from 'src/cohort/cohort.service';
+import { CohortEmployeeService } from '../cohort-employee/cohort-employee.service';
+import { CohortService } from '../cohort/cohort.service';
 
 @Controller('user')
 export class UserController {

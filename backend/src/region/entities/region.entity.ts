@@ -1,4 +1,4 @@
-import { CohortEntity } from 'src/cohort/entities/cohort.entity';
+import { CohortEntity } from '../../cohort/entities/cohort.entity';
 import {
   Column,
   Entity,
@@ -6,7 +6,7 @@ import {
   OneToMany,
   PrimaryGeneratedColumn,
 } from 'typeorm';
-import { SCHEMAS } from 'config/tables';
+import { SCHEMAS } from '../../../config/tables';
 
 @Entity(SCHEMAS.region)
 export class RegionEntity {
